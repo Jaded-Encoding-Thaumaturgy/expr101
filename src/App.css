@@ -39,3 +39,23 @@ body {
 .expr-display {
   font-family: monospace;
 }
+
+.expr-term-operator {
+  background-color: #708cd8;
+}
+
+.expr-term-operand-1 {
+  background-color: #d8a970;
+}
+
+.expr-term-operand-2 {
+  background-color: #9ad870;
+}
+
+.expr-term-operand-3 {
+  background-color: #70d8ca;
+}
+
+.expr-term-error {
+  background-color: #d87970;
+}

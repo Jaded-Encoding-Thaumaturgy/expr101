@@ -135,32 +135,28 @@ function buildTrees(tokens: Token[]): OperatorTree[] {
   return trees;
 }
 
-const operatorColor = "#708cd8";
-const operandColors = ["#d8a970", "#9ad870", "#70d8ca"];
-const errorColor = "#d87970";
-
 function ExprDisplay({trees}: {trees: OperatorTree[]}) {
   const [hovered, setHovered] = useState<number | undefined>(undefined);
 
   const operators: number[] = (hovered ? trees[hovered].children : []).map((c) => trees.findIndex(t => t.token.start === c.token.start));
 
-  const spanColor = (i: number): string | undefined => {
+  const spanColor = (i: number): string => {
     const index = operators.findIndex((o) => o === i);
     if (i === hovered) {
-      return operatorColor;
+      return "expr-term-operator";
     } else if (index !== -1) {
-      return operandColors[index % operandColors.length];
+      return `expr-term-operand-${index % 3 + 1}`;
     } else if (trees[i].errors.length) {
-      return errorColor;
+      return "expr-term-error";
     }
-    return undefined;
+    return "";
   };
 
   return (
     <div className="expr-display">
       {Array.from(trees.entries()).map(([i, tree]) =>
         <Fragment key={i}>
-          <span onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(undefined)} style={{background: "solid", backgroundColor: spanColor(i)}}>
+          <span className={spanColor(i)} onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(undefined)}>
             {tree.token.text}
           </span>
           {i !== trees.length && " "}

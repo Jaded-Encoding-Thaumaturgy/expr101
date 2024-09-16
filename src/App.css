@@ -1,11 +1,39 @@
+:root {
+  --expr-body-background-color: #fff;
+  --expr-body-text-color: #000;
+
+  --expr-input-background-color: #fff;
+  --expr-input-border-color: #d2d2d2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --expr-body-background-color: #161616;
+    --expr-body-text-color: #f1f1f1;
+  
+    --expr-input-background-color: #272727;
+    --expr-input-border-color: #272727;
+  }
+}
+
+body {
+  background-color: var(--expr-body-background-color);
+  color: var(--expr-body-text-color);
+}
+
 .App {
   text-align: center;
 }
 
 .expr-input {
+  background-color: var(--expr-input-background-color);
+  border: 1px solid var(--expr-input-border-color);
+  border-radius: 3px;
+  color: var(--expr-body-text-color);
   width: 90%;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  padding: 8px;
 }
 
 .expr-display {

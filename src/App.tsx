@@ -171,7 +171,7 @@ function App() {
 
   return (
     <div className="App">
-      <input type="text" className="expr-input" placeholder="Enter your expression here" onChange={(e) => setExpr(e.target.value)}/>
+      <input type="text" autoFocus className="expr-input" placeholder="Enter your expression here" onChange={(e) => setExpr(e.target.value)}/>
       <ExprDisplay trees={buildTrees(tokenize(expr))} />
     </div>
   );

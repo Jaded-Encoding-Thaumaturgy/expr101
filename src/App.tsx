@@ -157,7 +157,7 @@ function ExprDisplay({trees}: {trees: OperatorTree[]}) {
   };
 
   return (
-    <div>
+    <div className="expr-display">
       {Array.from(trees.entries()).map(([i, tree]) =>
         <Fragment key={i}>
           <span onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(undefined)} style={{background: "solid", backgroundColor: spanColor(i)}}>
@@ -175,7 +175,7 @@ function App() {
 
   return (
     <div className="App">
-      <input type="text" placeholder="Enter your expression here" onChange={(e) => setExpr(e.target.value)}/>
+      <input type="text" className="expr-input" placeholder="Enter your expression here" onChange={(e) => setExpr(e.target.value)}/>
       <ExprDisplay trees={buildTrees(tokenize(expr))} />
     </div>
   );

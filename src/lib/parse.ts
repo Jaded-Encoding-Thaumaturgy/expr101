@@ -24,8 +24,6 @@ const operatorArity: {[operator: string]: number} = {
   cos: 1,
   abs: 1,
   not: 1,
-  dup: 1,
-  dupN: 1,
 
   "+": 2,
   "-": 2,
@@ -71,6 +69,11 @@ function getArity(operator: string): Arity {
   } else if (operator.startsWith("drop")) {
     const num: number = Number(operator.substring("drop".length));
     return {popped: num, pushed: 0};
+  } else if (operator === "dup") {
+    return {popped: 1, pushed: 2};
+  } else if (operator.startsWith("dup")) {
+    const num: number = Number(operator.substring("dup".length));
+    return {popped: 1, pushed: num};
   } else if (operator.startsWith("sort")) {
     const num: number = Number(operator.substring("sort".length));
     return {popped: num, pushed: num};
@@ -97,7 +100,7 @@ export function tokenize(text: string): Token[] {
   return tokens;
 }
 
-// TODO: handle swap, swapN, dup, dupN, sortN
+// TODO: handle swap, swapN, sortN
 
 export function buildTrees(tokens: Token[]): OperatorTree[] {
   const stack: OperatorTree[] = [];

@@ -69,11 +69,6 @@ function getArity(operator: string): Arity {
   } else if (operator.startsWith("drop")) {
     const num: number = operator === "drop" ? 1 : Number(operator.substring("drop".length));
     return {popped: num, pushed: 0};
-  } else if (operator === "dup") {
-    return {popped: 1, pushed: 2};
-  } else if (operator.startsWith("dup")) {
-    const num: number = Number(operator.substring("dup".length));
-    return {popped: 1, pushed: num};
   } else if (operator.startsWith("sort")) {
     const num: number = Number(operator.substring("sort".length));
     return {popped: num, pushed: num};
@@ -106,24 +101,38 @@ export function buildTrees(tokens: Token[]): OperatorTree[] {
   const stack: OperatorTree[] = [];
   const trees: OperatorTree[] = [];
 
-  for (const [i, token] of Array.from(tokens.entries())) {
-    const {popped, pushed} = getArity(token.text);
+  const expectNumValues = (tree: OperatorTree, num: number) => {
+    if (stack.length < num) {
+      tree.errors.push(`Too few values on stack: Expected ${num}, got ${tree.children.length}.`);
+    }
+  }
 
+  for (const [i, token] of Array.from(tokens.entries())) {
     const tree: OperatorTree = {
       token: token,
-      children: popped === 0 ? [] : stack.slice(-popped),
+      children: [],
       errors: [],
     };
 
-    if (tree.children.length < popped) {
-      tree.errors.push(`Too few values on stack: Expected ${popped}, got ${tree.children.length}.`);
-    }
+    if (token.text.startsWith("dup")) {
+      const num: number = token.text === "dup" ? 0 : Number(token.text.substring("dup".length));
 
-    for (let j = 0; j < popped; j++) {
-      stack.pop();
-    }
-    for (let j = 0; j < pushed; j++) {
+      expectNumValues(tree, num + 1);
+      tree.children = [stack[stack.length - num - 1]];
+
       stack.push(tree);
+    } else {
+      const {popped, pushed} = getArity(token.text);
+      expectNumValues(tree, popped);
+
+      tree.children = popped === 0 ? [] : stack.slice(-popped);
+
+      for (let j = 0; j < popped; j++) {
+        stack.pop();
+      }
+      for (let j = 0; j < pushed; j++) {
+        stack.push(tree);
+      }
     }
 
     if (i === tokens.length - 1 && stack.length > 1) {

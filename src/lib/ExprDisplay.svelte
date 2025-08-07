@@ -24,7 +24,7 @@
   {#each trees as tree, i (i)}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <!-- I'm too bad at ARIA to know which role is appropriate here, patches welcome! -->
-    <span class={spanColor(i)} onmouseenter={() => {hovered = i}} onmouseleave={() => {hovered = undefined}}>
+    <span class={spanColor(i)} onmouseenter={() => {hovered = i}} onmouseleave={() => {hovered = undefined}} title={trees[i].errors.join("\n")}>
       {tree.token.text}
     </span>
     {#if i !== trees.length}

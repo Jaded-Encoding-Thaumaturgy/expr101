@@ -95,8 +95,6 @@ export function tokenize(text: string): Token[] {
   return tokens;
 }
 
-// TODO: handle swap, swapN, sortN
-
 export function buildTrees(tokens: Token[]): OperatorTree[] {
   const stack: OperatorTree[] = [];
   const trees: OperatorTree[] = [];
@@ -121,6 +119,16 @@ export function buildTrees(tokens: Token[]): OperatorTree[] {
       tree.children = [stack[stack.length - num - 1]];
 
       stack.push(tree);
+    } else if (token.text.startsWith("swap")) {
+      const num: number = token.text === "swap" ? 1 : Number(token.text.substring("swap".length));
+
+      const [n, m] = [stack.length - num - 1, stack.length - 1]
+
+      expectNumValues(tree, num + 1);
+      tree.children = [stack[n], stack[m]];
+
+      stack[m] = tree.children[0];
+      stack[n] = tree.children[1];
     } else {
       const {popped, pushed} = getArity(token.text);
       expectNumValues(tree, popped);

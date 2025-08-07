@@ -67,7 +67,7 @@ function getArity(operator: string): Arity {
   } else if (operator.endsWith("[]")) {
     return {popped: 2, pushed: 1};
   } else if (operator.startsWith("drop")) {
-    const num: number = Number(operator.substring("drop".length));
+    const num: number = operator === "drop" ? 1 : Number(operator.substring("drop".length));
     return {popped: num, pushed: 0};
   } else if (operator === "dup") {
     return {popped: 1, pushed: 2};

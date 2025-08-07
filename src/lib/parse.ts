@@ -119,16 +119,17 @@ export function buildTrees(tokens: Token[]): OperatorTree[] {
       tree.errors.push(`Too few values on stack: Expected ${popped}, got ${tree.children.length}.`);
     }
 
-    if (i === tokens.length - 1 && popped < stack.length) {
-      tree.errors.push(`${stack.length - popped} values left on stack!`);
-    }
-
     for (let j = 0; j < popped; j++) {
       stack.pop();
     }
     for (let j = 0; j < pushed; j++) {
       stack.push(tree);
     }
+
+    if (i === tokens.length - 1 && stack.length > 1) {
+      tree.errors.push(`${stack.length - 1} values left on stack!`);
+    }
+
     trees.push(tree);
   }
 
